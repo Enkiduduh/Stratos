@@ -1,39 +1,47 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stratos.css">
-</head>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Lilita+One&family=Macondo&family=Pirata+One&display=swap"
+      rel="stylesheet"
+    />
 
-<body>
-    <div class="display-container hero">
-        <div class="display" id="hero"></div>
+    <link rel="stylesheet" href="stratos.css" />
+  </head>
+
+  <body>
+    <div class="body-container">
+      <div class="display-container hero">
         <div class="display-cmd hero-cmd">
-            <div class="actionName">
-                <div class="actionBtn moveBtn">Move</div>
-                <div class="actionBtn attackBtn">Attack</div>
-                <div class="actionBtn defendBtn">Defend</div>
-                <div class="actionBtn inventoryBtn">Inventory</div>
-                <div class="inventory-container"></div>
-                <div class="actionBtn endBtn"> Endturn</div>
-                <div class="actionBtn-container">
-                    <div class="actionBtn yesBtn">Yes</div>
-                    <div class="actionBtn noBtn">No</div>
-                </div>
+          <div class="actionName">
+            <div class="actionBtn moveBtn">Move</div>
+            <div class="actionBtn attackBtn">Attack</div>
+            <div class="actionBtn defendBtn">Defend</div>
+            <div class="actionBtn inventoryBtn">Inventory</div>
+            <div class="inventory-container"></div>
+            <div class="actionBtn endBtn">Endturn</div>
+            <div class="actionBtn-container">
+              <div class="actionBtn yesBtn">Yes</div>
+              <div class="actionBtn noBtn">No</div>
             </div>
+          </div>
         </div>
-    </div>
-    <div class="chess-board">
-        <div class="chess">
+        <div class="void"></div>
+        <div class="display-player">
+          <!-- vertical portrait player will be injected -->
+        </div>
+      </div>
+      <div class="chess-container">
+        <div class="chess-board">
+          <div class="chess">
             <div class="case" data-x="1" data-y="6"></div>
             <div class="case" data-x="2" data-y="6"></div>
             <div class="case" data-x="3" data-y="6"></div>
@@ -70,29 +78,38 @@
             <div class="case" data-x="4" data-y="1"></div>
             <div class="case" data-x="5" data-y="1"></div>
             <div class="case" data-x="6" data-y="1"></div>
+          </div>
         </div>
-    </div>
-    <div class="display-container foe">
-        <div class="display" id="foe"></div>
+        <div class="display-stats-infos">
+          <div class="display-player-stats">
+            <!-- Stats player will be injected -->
+          </div>
+          <div class="display-enemy-stats">
+            <!-- Stats enemy will be injected -->
+          </div>
+        </div>
+      </div>
+      <div class="display-container foe">
         <div class="display-cmd foe-cmd">
-            <div class="actionName">
-                <div class="actionBtn moveBtn">Move</div>
-                <div class="actionBtn attackBtn">Attack</div>
-                <div class="actionBtn defendBtn">Defend</div>
-                <div class="actionBtn inventoryBtn">Inventory</div>
-                <div class="actionBtn endBtn"> Endturn</div>
-                <div class="actionBtn-container">
-                    <div class="actionBtn yesBtn">Yes</div>
-                    <div class="actionBtn noBtn">No</div>
-                </div>
+          <div class="actionName">
+            <div class="actionBtn moveBtn">Move</div>
+            <div class="actionBtn attackBtn">Attack</div>
+            <div class="actionBtn defendBtn">Defend</div>
+            <div class="actionBtn inventoryBtn">Inventory</div>
+            <div class="actionBtn endBtn">Endturn</div>
+            <div class="actionBtn-container">
+              <div class="actionBtn yesBtn">Yes</div>
+              <div class="actionBtn noBtn">No</div>
             </div>
+          </div>
         </div>
-    </div>
-    <div class="mov-points"></div>
-
+        <div class="void"></div>
+        <div class="display-enemy">
+          <!-- vertical portrait enemy will be injected -->
+        </div>
+      </div>
     </div>
 
     <script src="stratos.js" async defer></script>
-</body>
-
+  </body>
 </html>

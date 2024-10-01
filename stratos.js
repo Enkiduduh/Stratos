@@ -25,7 +25,8 @@ const player = {
   agi: 2,
   movePoints: 2,
   actionPoints: 1,
-  img: 'assets/hero.png',
+  img: 'assets/player_ryu1.png',
+  vertical_img: 'assets/vertical_portrait_ryu_v2.png',
   posX: null,
   posY: null,
   turnDone: false,
@@ -48,6 +49,8 @@ const enemy = {
   movePoints: 2,
   actionPoints: 1,
   img: 'assets/enemy.png',
+  vertical_img: 'assets/vertical_portrait_skeleton_v3.png',
+
   posX: null,
   posY: null,
   turnDone: false,
@@ -60,10 +63,12 @@ const enemy = {
   ],
 }
 
+const initialDefPlayer = player.def;
+const initialDefEnemy = enemy.def;
+
 function initalPos(char_obj, x, y) {
   char_obj.posX = x;
   char_obj.posY = y;
-  console.log(char_obj)
 }
 
 initalPos(player, 2, 2)
@@ -100,15 +105,31 @@ function attackHandler(char_obj) {
 
 
 
+
 function initPlayer() {
   const playerCase = document.querySelector(`.case[data-x="${player.posX}"][data-y="${player.posY}"]`);
-  playerCase.innerHTML = `<img src=${player.img} alt=${player.name}>`
+  const portraitPlayer = document.querySelector(".display-player");
+  portraitPlayer.innerHTML = `<img src=${player.vertical_img} alt=${player.name} /> `;
+  playerCase.innerHTML = `
+  <div class="char-obj-case">
+    <img src=${player.img} alt=${player.name}>
+    <div class="char-obj-case-life-container">
+        <div class="char-obj-case-life"><div>
+    </div>
+  </div>`;
   displayCharHeroInfo(player, playerCase);
 
   const enemyCase = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
-  enemyCase.innerHTML = `<img src=${enemy.img} alt=${enemy.name}>`
+  const portraitEnemy = document.querySelector(".display-enemy");
+  portraitEnemy.innerHTML = `<img src=${enemy.vertical_img} alt=${enemy.name} /> `;
+  enemyCase.innerHTML = `
+  <div class="char-obj-case">
+    <img src=${enemy.img} alt=${enemy.name}>
+    <div class="char-obj-case-life-container">
+        <div class="char-obj-case-life"><div>
+    </div>
+  </div>`;
   displayCharFoeInfo(enemy);
-
   playerCase.addEventListener("click", () => {
     actionButtonsHandler(player, playerCase);
 
@@ -118,7 +139,13 @@ function initPlayer() {
 
 function initEnemy() {
   const enemyCase = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
-  enemyCase.innerHTML = `<img src=${enemy.img} alt=${enemy.name}>`
+  enemyCase.innerHTML = `
+  <div class="char-obj-case">
+    <img src=${enemy.img} alt=${enemy.name}>
+    <div class="char-obj-case-life-container">
+        <div class="char-obj-case-life"><div>
+    </div>
+  </div>`;
   displayCharFoeInfo(enemy);
   enemyCase.addEventListener("click", () => {
     actionButtonsHandler(enemy, enemyCase);
@@ -163,6 +190,7 @@ function turn() {
     waitForTurnEnd(player).then(() => {
       console.log("Player's turn is done.");
       isPlayerTurn = false; // Passer au tour de l'ennemi
+      enemy.def = initialDefEnemy;
       turn(); // Recommence le cycle pour l'ennemi
     });
   } else {
@@ -171,6 +199,7 @@ function turn() {
     waitForTurnEnd(enemy).then(() => {
       console.log("Enemy's turn is done.");
       isPlayerTurn = true; // Repasser au tour du joueur
+      player.def = initialDefPlayer;
       turn(); // Recommence le cycle pour le joueur
     });
   }
@@ -193,7 +222,16 @@ function actionEndTurn(char_obj) {
   });
 
 }
+// Function to toggle inventory menu
+function toggleInventory() {
+  const inventoryMenu = document.getElementById('inventoryMenu');
+  if (inventoryMenu.style.display === 'none' || inventoryMenu.style.display === '') {
+    inventoryMenu.style.display = 'block';
 
+  } else {
+    inventoryMenu.style.display = 'none';
+  }
+}
 function inventoryHandler(char_obj) {
   const inventory = char_obj.inventory;
   if (inventoryBag.textContent === "") {
@@ -263,7 +301,14 @@ function targetMovement(char_obj, char_case) {
               allSelectedMoves.forEach(m => m.classList.remove("selected-square"));
 
               char_case = move;
-              char_case.innerHTML = `<img src=${char_obj.img} alt=${char_obj.name}>`;
+              char_case.innerHTML = `
+              <div class="char-obj-case">
+                  <img src=${char_obj.img} alt=${char_obj.name}>
+                  <div class="char-obj-case-life-container">
+                      <div class="char-obj-case-life"><div>
+                  </div>
+              </div>`;
+
               char_case.setAttribute('data-occupied', 'true');
 
               // Update character movePoints to prevent further moves
@@ -314,31 +359,22 @@ function removeEventListeners(moves) {
 
 function displayCharHeroInfo(char_obj) {
   if (char_obj == player) {
-    const dataDisplay = document.getElementById(`hero`);
+    const dataDisplay = document.querySelector(`.display-player-stats`);
     dataDisplay.innerHTML = `
-    <div class="display-character">
-            <div class="display-line">
-                <div>${char_obj.name}</div>
-                <div>Level: ${char_obj.level}</div>
-            </div>
-            <div class="display-life">
-                <div class="life"></div>
-            </div>
-            <div class="display-line">
-                <div>HP: ${char_obj.hp}</div>
-                <div>MP: ${char_obj.mp}</div>
-            </div>
-            <div class="display-line">
-                <div>STR: ${char_obj.str}</div>
-                <div>DEF: ${char_obj.def}</div>
-            </div>
-            <div class="display-line">
-                <div>AGI: ${char_obj.agi}</div>
-                <div class="mov-points">MOV: ${char_obj.movePoints}</div>
-            </div>
-             <div class="display-line">
-                <div>AP: ${char_obj.actionPoints}</div>
-            </div>
+        <div class="stats-column">
+          <div class="display-player-stats-infos">${char_obj.name}</div>
+          <div class="display-player-stats-infos">Level: ${char_obj.level}</div>
+          <div class="display-player-stats-infos">AC: ${char_obj.actionPoints}</div>
+        </div>
+        <div class="stats-column">
+          <div class="display-player-stats-infos">HP: ${char_obj.hp}</div>
+          <div class="display-player-stats-infos">PC: ${char_obj.mp}</div>
+          <div class="display-player-stats-infos">MOV: ${char_obj.movePoints}</div>
+        </div>
+        <div class="stats-column">
+          <div class="display-player-stats-infos">STR: ${char_obj.str}</div>
+          <div class="display-player-stats-infos">DEF: ${char_obj.def}</div>
+          <div class="display-player-stats-infos">AGI: ${char_obj.agi}</div>
         </div>
     `;
   }
@@ -347,33 +383,24 @@ function displayCharHeroInfo(char_obj) {
 
 
 function displayCharFoeInfo(char_obj) {
-  const dataDisplay = document.getElementById(`foe`);
+  const dataDisplay = document.querySelector(`.display-enemy-stats`);
   dataDisplay.innerHTML = `
-    <div class="display-character">
-            <div class="display-line">
-                <div>${char_obj.name}</div>
-                <div>Level: ${char_obj.level}</div>
-            </div>
-            <div class="display-life">
-                <div class="life"></div>
-            </div>
-            <div class="display-line">
-                <div>HP: ${char_obj.hp}</div>
-                <div>MP: ${char_obj.mp}</div>
-            </div>
-            <div class="display-line">
-                <div>STR: ${char_obj.str}</div>
-                <div>DEF: ${char_obj.def}</div>
-            </div>
-            <div class="display-line">
-                <div>AGI: ${char_obj.agi}</div>
-                <div class="mov-points">MOV: ${char_obj.movePoints}</div>
-            </div>
-            <div class="display-line">
-                <div>AP: ${char_obj.actionPoints}</div>
-            </div>
-        </div>
-    `;
+      <div class="stats-column">
+        <div class="display-enemy-stats-infos">STR: ${char_obj.str}</div>
+        <div class="display-enemy-stats-infos">DEF: ${char_obj.def}</div>
+        <div class="display-enemy-stats-infos">AGI: ${char_obj.agi}</div>
+      </div>
+      <div class="stats-column">
+        <div class="display-enemy-stats-infos">HP: ${char_obj.hp}</div>
+        <div class="display-enemy-stats-infos">PC: ${char_obj.mp}</div>
+        <div class="display-enemy-stats-infos">MOV: ${char_obj.movePoints}</div>
+      </div>
+      <div class="stats-column">
+        <div class="display-enemy-stats-infos">${char_obj.name}</div>
+        <div class="display-enemy-stats-infos">Level: ${char_obj.level}</div>
+        <div class="display-enemy-stats-infos">AC: ${char_obj.actionPoints}</div>
+      </div>
+  `;
 }
 
 // Démarrage du cycle jeu

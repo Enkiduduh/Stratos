@@ -1,33 +1,80 @@
+html {
+  overflow:hidden;
+}
 body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.body-container {
   display: flex;
-  align-items: center;
+  justify-content:center;
+  background: rgb(177, 115, 53);
+  z-index: 3;
+  position: relative;
+  margin: 0 auto;
 }
 
 .chess-board {
   display: flex;
   justify-content: space-around;
-  align-items: center;
 }
 
 .chess {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 510x;
-  margin: 20px 30px;
+  margin: 5px 10px;
+  background: rgba(63, 146, 74, 0.5);
 }
 
 .case {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
+  // background: gainsboro;
 }
 
-/* .case:hover {
-    background: rgba(133, 159, 111, 0.5);
-} */
+.display-stats-infos {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  left:13%;
+  z-index: 0;
+  margin: 10px auto;
+  width: 800px;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.681);
+  border: 1px solid white;
+  color: white;
+  font-family: "Macondo", cursive;
+  font-weight: 500;
+  .display-player-stats,
+  .display-enemy-stats {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+
+    .stats-column {
+      padding: 7px 9px;
+    }
+
+    .display-player-stats-infos,
+    .display-enemy-stats-infos {
+      margin: 5px 10px;
+      font-size: 20px;
+    }
+  }
+}
 
 .initial-square {
   background: rgb(48, 178, 113);
@@ -63,6 +110,24 @@ body {
   height: 100px;
 }
 
+.char-obj-case {
+  cursor: pointer;
+}
+
+.char-obj-case-life-container {
+  background: whitesmoke;
+  border: 1px solid black;
+  height: 6px;
+  width: 60px;
+  margin: 3px 0;
+  border-radius: 3px;
+  .char-obj-case-life {
+    background: #2fb828;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 #foe {
   display: flex;
   align-items: center;
@@ -76,6 +141,15 @@ body {
   color: whitesmoke;
 }
 
+.display-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  img {
+    height: 400px;
+  }
+}
 .display-character {
 }
 
@@ -83,7 +157,7 @@ body {
   display: flex;
   justify-content: space-between;
   width: 120px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Lilita One", system-ui;
 }
 
 .display-life {
@@ -104,15 +178,21 @@ body {
 .display-cmd {
   display: flex;
   flex-direction: column;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Lilita One", system-ui;
   padding: 5px;
   border: 1px solid black;
   border-radius: 5px;
-  width: 150px;
-  background: lightslategray;
-  /* height: 50px; */
+  width: 190px;
+  background: rgba(191, 193, 196, 0.5);
+  height: 180px;
   color: whitesmoke;
   margin: 10px 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.void {
+  flex-grow: 1;
 }
 
 .actionName {
@@ -123,17 +203,17 @@ body {
 
 .actionBtn {
   margin: 5px auto;
-  padding: 5px;
+  padding: 3px;
   border: 1px solid black;
   border-radius: 5px;
   background: #1c6ea4;
   font-family: "Lilita One", system-ui;
-  width: 120px;
+  width: 170px;
 }
 
 .actionBtn:hover {
   background: #4b98cc;
-  transform: scale(1.2);
+  transform: scale(1.1);
   cursor: pointer;
 }
 
@@ -173,7 +253,7 @@ body {
 }
 .inventoryBtn {
   position: relative;
-  margin-bottom: 1px;
+  margin-bottom: 5px;
 }
 .inventory-container {
   display: none;
@@ -185,10 +265,10 @@ body {
   margin: 5px auto;
   border-bottom-left-radius: 5px;
   border-radius: 5px;
-  border:2px solid white;
+  border: 2px solid white;
 }
 .inventory-line {
-  display : flex;
+  display: flex;
   justify-content: space-between;
   margin: 2px 5px;
   &:hover {
