@@ -28,6 +28,7 @@ body {
 /* .case:hover {
     background: rgba(133, 159, 111, 0.5);
 } */
+
 .initial-square {
   background: rgb(48, 178, 113);
   outline: 3px ridge #1c6ea4;
@@ -73,6 +74,9 @@ body {
   background: lightslategray;
   /* height: 100px; */
   color: whitesmoke;
+}
+
+.display-character {
 }
 
 .display-line {
@@ -149,7 +153,6 @@ body {
   width: 28px;
   margin: 0 2px;
 }
-
 .yesBtn:hover {
   background: #7ef278;
   transform: scale(1.1);
@@ -163,18 +166,15 @@ body {
   width: 28px;
   margin: 0 2px;
 }
-
 .noBtn:hover {
   background: #ff7474;
   transform: scale(1.1);
   cursor: pointer;
 }
-
 .inventoryBtn {
   position: relative;
   margin-bottom: 1px;
 }
-
 .inventory-container {
   display: none;
   position: relative;
@@ -185,16 +185,15 @@ body {
   margin: 5px auto;
   border-bottom-left-radius: 5px;
   border-radius: 5px;
-  border: 2px solid white;
+  border:2px solid white;
 }
-
 .inventory-line {
-  display: flex;
+  display : flex;
   justify-content: space-between;
   margin: 2px 5px;
+  &:hover {
+    background: #1c6ea4;
+    cursor: pointer;
+    transform: scale(1.1);
+  }
 }
-.inventory-line:hover {
-  background: #1c6ea4;
-  cursor: pointer;
-  transform: scale(1.1);
-}/*# sourceMappingURL=stratos.css.map */
