@@ -15,6 +15,9 @@ body {
   display: flex;
   justify-content: center;
   background: rgb(177, 115, 53);
+  background-image: url("/assets/bg_field_dice.png");
+  background-size: cover;
+  background-position: center;
   z-index: 3;
   position: relative;
   margin: 0 auto;
@@ -30,7 +33,11 @@ body {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   width: 510x;
   margin: 5px 10px;
-  background: rgba(63, 146, 74, 0.5);
+  background-image: url("/assets/bg_chessboard_1.png");
+  background-size: cover;
+  background-position: center;
+  border: 5px solid white;
+  border-radius: 2px;
 }
 
 .case {
@@ -44,18 +51,16 @@ body {
 
 .display-stats-infos {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   position: absolute;
-  left: 13%;
+  left: 0%;
   z-index: 0;
   margin: 10px auto;
-  width: 800px;
+  width: 1070px;
   height: 100px;
-  background: rgba(0, 0, 0, 0.681);
-  border: 1px solid white;
-  color: white;
-  font-family: "Macondo", cursive;
-  font-weight: 500;
+}
+.display-stats-infos .display-combat {
+  width: 300px;
 }
 .display-stats-infos .display-player-stats,
 .display-stats-infos .display-enemy-stats {
@@ -63,7 +68,15 @@ body {
   justify-content: space-evenly;
   align-items: center;
   height: 100%;
-  width: 50%;
+  width: 320px;
+  margin: 0 10px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 3px solid white;
+  color: white;
+  background-image: url("/assets/bg-display-stats.png");
+  background-position: center;
+  background-size: cover;
+  box-shadow: #fff 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px, red 0 -18px 40px, 5px 5px 15px 5px rgba(0, 0, 0, 0);
 }
 .display-stats-infos .display-player-stats .stats-column,
 .display-stats-infos .display-enemy-stats .stats-column {
@@ -75,6 +88,15 @@ body {
 .display-stats-infos .display-enemy-stats .display-enemy-stats-infos {
   margin: 5px 10px;
   font-size: 20px;
+  font-family: "Macondo", cursive;
+  font-weight: 600;
+  text-shadow: 3px 3px 5px rgb(255, 38, 0);
+}
+.display-stats-infos .player-3D {
+  transform: perspective(350px) rotateY(15deg);
+}
+.display-stats-infos .enemy-3D {
+  transform: perspective(350px) rotateY(-15deg);
 }
 
 .initial-square {
@@ -179,15 +201,24 @@ body {
   flex-direction: column;
   font-family: "Lilita One", system-ui;
   padding: 5px;
-  border: 1px solid black;
+  border: 3px solid white;
   border-radius: 5px;
   width: 190px;
-  background: rgba(191, 193, 196, 0.5);
+  background: rgba(160, 114, 23, 0.5);
   height: 180px;
   color: whitesmoke;
   margin: 10px 0;
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.hero-cmd {
+  transform: perspective(350px) rotateY(10deg);
+}
+
+.foe-cmd {
+  transform: perspective(350px) rotateY(-10deg);
+  text-align: right;
 }
 
 .void {
