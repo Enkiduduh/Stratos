@@ -1,4 +1,3 @@
-// import { player, enemy } from "./characters"
 const chessCases = document.querySelectorAll(".case");
 const imgHero = document.querySelector(".img-hero");
 const imgEnemy = document.querySelector(".img-enemy");
@@ -12,11 +11,14 @@ const endBtn = document.querySelector(".endBtn");
 const yesBtn = document.querySelector(".yesBtn");
 const noBtn = document.querySelector(".noBtn");
 const inventoryBag = document.querySelector(".inventory-container");
+const attackBag = document.querySelector(".attack-container");
 let endTurn = false;
 let isPlayerTurn = true; // Détermine si c'est le tour du joueur ou de l'ennemi
+let selectedWeaponName = null;
 
 const player = {
   name: "Enki",
+  tag: "hero",
   level: 1,
   hp: 10,
   mp: 4,
@@ -32,6 +34,11 @@ const player = {
   turnDone: false,
   hasMoved: false,
   hasAttacked: false,
+  weapons: [
+    { name: "Sword", range: 1, damage: 4, crit: 0.1 },
+    { name: "Punch", range: 1, damage: 2, crit: 0.5 },
+    { name: "Bow", range: 4, damage: 2, crit: 0.2 }
+  ],
   inventory: [
     { name: "Potion", quantity: 5 },
     { name: "Ether", quantity: 3 },
@@ -40,6 +47,7 @@ const player = {
 }
 const enemy = {
   name: "Undead",
+  tag: "enemy",
   level: 1,
   hp: 10,
   mp: 4,
@@ -50,12 +58,15 @@ const enemy = {
   actionPoints: 1,
   img: 'assets/enemy.png',
   vertical_img: 'assets/vertical_portrait_skeleton_v3.png',
-
   posX: null,
   posY: null,
   turnDone: false,
   hasMoved: false,
   hasAttacked: false,
+  weapons: [
+    { name: "Sword", range: 1, damage: 4, crit: 0.1 },
+    { name: "Bow", range: 4, damage: 2, crit: 0.2 }
+  ],
   inventory: [
     { name: "Potion", quantity: 5 },
     { name: "Ether", quantity: 3 },
@@ -83,6 +94,12 @@ function actionButtonsHandler(char_obj, char_case) {
       }
       if (btn.classList.contains("attackBtn")) {
         attackHandler(char_obj);
+        console.log(selectedWeaponName)
+        if (selectedWeaponName != null) {
+          console.log('Enter atk phase')
+          attackTarget(char_obj, selectedWeaponName)
+          console.log('Out atk phase')
+        }
       }
       if (btn.classList.contains("defendBtn")) {
         actionDefend(char_obj);
@@ -97,13 +114,6 @@ function actionButtonsHandler(char_obj, char_case) {
     });
   });
 }
-
-function attackHandler(char_obj) {
-  console.log("Test attack");
-}
-
-
-
 
 
 function initPlayer() {
@@ -220,21 +230,11 @@ function actionEndTurn(char_obj) {
     yesBtn.style.display = "none";
     noBtn.style.display = "none";
   });
-
 }
-// Function to toggle inventory menu
-function toggleInventory() {
-  const inventoryMenu = document.getElementById('inventoryMenu');
-  if (inventoryMenu.style.display === 'none' || inventoryMenu.style.display === '') {
-    inventoryMenu.style.display = 'block';
 
-  } else {
-    inventoryMenu.style.display = 'none';
-  }
-}
 function inventoryHandler(char_obj) {
   const inventory = char_obj.inventory;
-  if (inventoryBag.textContent === "") {
+  if (inventoryBag.textContent === "" || inventoryBag.style.display === 'none') {
     inventoryBag.style.display = "block";
     inventory.forEach((item) => {
       inventoryBag.innerHTML += `
@@ -244,8 +244,41 @@ function inventoryHandler(char_obj) {
       </div>`;
     });
   } else {
+    // Reset inventory display
+    inventoryBag.innerHTML = '';
     inventoryBag.style.display = "none";
-    console.log("Inventory already displayed");
+    console.log("Close Inventory");
+  }
+}
+
+function attackWeaponSelector(element) {
+  // Vous pouvez maintenant accéder à l'élément cliqué et ses enfants
+  const weaponName = element.querySelector('.attack-line-text').textContent;
+  console.log(weaponName);
+  selectedWeaponName = weaponName;
+}
+
+function attackHandler(char_obj) {
+  console.log("Test attack");
+  const weapons = char_obj.weapons;
+  if (attackBag.textContent === "" || attackBag.style.display === 'none') {
+    attackBag.style.display = "block";
+    weapons.forEach((weapon) => {
+      const attackLine = document.createElement('div');
+      attackLine.className = 'attack-line';
+      attackLine.innerHTML = `
+        <div class="attack-line-text">${weapon.name}</div>
+        <div class="attack-line-text">R: ${weapon.range}</div>
+        <div class="attack-line-text">Dmg: ${weapon.damage}</div>
+      `;
+      attackLine.addEventListener('click', () => attackWeaponSelector(attackLine));
+      attackBag.appendChild(attackLine);
+    });
+  } else {
+    // Reset attack display
+    attackBag.innerHTML = '';
+    attackBag.style.display = "none";
+    console.log("Attack already displayed");
   }
 }
 
@@ -260,6 +293,69 @@ function actionDefend(char_obj) {
 }
 
 console.log(movPoints)
+
+function attackTarget(char_obj, weaponChoice) {
+  const actualPos = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY}"]`);
+  const target = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
+  if (char_obj.actionPoints < 1) {
+    console.log("Not enough action points.");
+    return;
+  }
+  if (char_obj.hasAttacked) {
+    console.log("Already attacked.");
+    return;
+  }
+  if (char_obj.actionPoints > 0) {
+    console.log(selectedWeaponName)
+    let weaponRange = null;
+    const weapons = char_obj.weapons;
+    const weaponBow = weapons.filter((weapon) => weapon.name.includes("Bow"));
+    const weaponSword = weapons.filter((weapon) => weapon.name.includes("Sword"));
+    if (weaponChoice == weaponSword[0].name) {
+      weaponRange = weaponSword[0].range;
+    } else if (weaponChoice == weaponBow[0].name) {
+      weaponRange = weaponBow[0].range;
+    } else {
+      console.log("Error in weapon name...")
+    }
+
+    for (let i = 0; i <= weaponRange; i++) {
+      const posPlusMovX = document.querySelector(`.case[data-x="${char_obj.posX + i}"][data-y="${char_obj.posY}"]`);
+      const posPlusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY + i}"]`);
+      const posMinusMovX = document.querySelector(`.case[data-x="${char_obj.posX - i}"][data-y="${char_obj.posY}"]`);
+      const posMinusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY - i}"]`);
+
+      // Add the class "possibleMov"
+      if (posPlusMovX) posPlusMovX.classList.add("possibleAtk");
+      if (posPlusMovY) posPlusMovY.classList.add("possibleAtk");
+      if (posMinusMovX) posMinusMovX.classList.add("possibleAtk");
+      if (posMinusMovY) posMinusMovY.classList.add("possibleAtk");
+      actualPos.classList.remove("possibleAtk");
+
+      const attacks = [posPlusMovX, posPlusMovY, posMinusMovX, posMinusMovY];
+      attacks.forEach((attack) => {
+        if (attack) {
+          attack.addEventListener("click", () => {
+            console.log("Attack this case!")
+          });
+        }
+      })
+
+
+
+    }
+  }
+}
+const weapons = player.weapons
+const testWpn = "Bow";
+let testRange = null;
+const weaponBow = weapons.filter((weapon) => weapon.name.includes("Bow"));
+console.log(weaponBow[0].name == "Bow")
+if (testWpn == weaponBow[0].name) {
+  testRange = weaponBow[0].range;
+}
+console.log(testRange)
+console.log(testWpn)
 
 function targetMovement(char_obj, char_case) {
   const actualPos = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY}"]`);

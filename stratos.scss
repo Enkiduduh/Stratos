@@ -104,20 +104,27 @@ body {
   }
 }
 
+
+// CASE SELECTOR AND CASE STYLED AREAS
 .initial-square {
   background: rgb(48, 178, 113);
   outline: 3px ridge #1c6ea4;
   outline-offset: 0px;
 }
-
+// Hovered Cases
 .selected-square {
   background: rgb(56, 180, 60);
   outline: 5px ridge #26581b;
   outline-offset: 0px;
 }
-
+// Movement Area Cases
 .possibleMov {
   background: rgba(63, 146, 74, 0.5);
+}
+
+// Attack Area Cases
+.possibleAtk {
+  background: rgba(182, 18, 59, 0.5);
 }
 
 #hero {
@@ -286,6 +293,39 @@ body {
   transform: scale(1.1);
   cursor: pointer;
 }
+// ATTACK COMMAND SECTION
+.attackBtn {
+  position: relative;
+  margin-bottom: 5px;
+}
+.attack-container {
+  display: none;
+  position: relative;
+  background: #4b98cc;
+  color: white;
+  width: 150px;
+  padding: 5px;
+  margin: 5px auto;
+  border-bottom-left-radius: 5px;
+  border-radius: 5px;
+  border: 2px solid white;
+}
+.attack-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 5px;
+  font-size: 14px;
+  &:hover {
+    background: #1c6ea4;
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+  .attack-line-text {
+    
+  }
+}
+
+// INVENTORY COMMAND SECTION
 .inventoryBtn {
   position: relative;
   margin-bottom: 5px;

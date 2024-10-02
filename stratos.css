@@ -115,6 +115,10 @@ body {
   background: rgba(63, 146, 74, 0.5);
 }
 
+.possibleAtk {
+  background: rgba(182, 18, 59, 0.5);
+}
+
 #hero {
   display: flex;
   align-items: center;
@@ -284,6 +288,35 @@ body {
   cursor: pointer;
 }
 
+.attackBtn {
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.attack-container {
+  display: none;
+  position: relative;
+  background: #4b98cc;
+  color: white;
+  width: 150px;
+  padding: 5px;
+  margin: 5px auto;
+  border-bottom-left-radius: 5px;
+  border-radius: 5px;
+  border: 2px solid white;
+}
+
+.attack-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 5px;
+  font-size: 14px;
+}
+.attack-line:hover {
+  background: #1c6ea4;
+  cursor: pointer;
+  transform: scale(1.1);
+}
 .inventoryBtn {
   position: relative;
   margin-bottom: 5px;
