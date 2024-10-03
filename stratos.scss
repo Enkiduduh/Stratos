@@ -51,26 +51,123 @@ body {
   align-items: center;
 }
 
+.enemyTag {
+  background: transparent;
+}
+
+.heroTag {
+  background: transparent;
+}
+
+////////////////////////////////
+// DISPLAY HUD                //
+////////////////////////////////
 .display-stats-infos {
   display: flex;
   justify-content: center;
   position: absolute;
-  left: 0%;
+  left: 0.3%;
   z-index: 0;
   margin: 10px auto;
   width: 1070px;
   height: 100px;
 
   .display-combat {
-    width: 300px;
+    width: 340px;
+    height: 100px;
+    border: 3px solid white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    color: white;
+    font-family: "Macondo", cursive;
+    font-weight: 600;
+    background: rgba(164, 87, 33, 0.871);
+    // background-image: url("/assets/bg-display-stats.png");
+    // background-position: center;
+    // background-size: cover;
+    .display-combat-box {
+      width: 150px;
+      height: 90px;
+      margin: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .display-combat-box-hit {
+        width: 50px;
+        height: 80px;
+        border: 2px solid white;
+        border-radius: 5px;
+        .display-combat-box-hit-name {
+          height: 30px;
+          font-size: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background:black;
+          border-top-right-radius: 5px;
+          border-top-left-radius: 5px;
+
+        }
+        .display-combat-box-hit-value {
+          font-size: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          height: 50px;
+        }
+      }
+      .display-combat-box-stat {
+        display: flex;
+        flex-direction: column;
+        .display-combat-box-stat-line-box {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          width: 70px;
+          background: rgb(236, 157, 92);
+          margin: 2px;
+          .display-combat-box-stat-line {
+          }
+          .display-combat-box-stat-line-stat {
+            background: rgb(121, 48, 22);
+            border: 2px solid white;
+            height: 20px;
+            padding: 0 2px;
+            border-radius: 2px;
+          }
+        }
+        .hero {
+          padding-left: 10px;
+        }
+        .foe {
+          padding-right: 10px;
+        }
+      }
+    }
   }
+  .startBattle {
+    border: 3px solid white;
+    padding: 10px;
+    -webkit-box-shadow: #fff 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px,
+      red 0 -18px 40px, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+    box-shadow: #fff 0 -1px 4px, #ff0 0 -2px 10px, #ff8000 0 -10px 20px,
+      red 0 -18px 40px, 5px 5px 15px 5px rgba(0, 0, 0, 0);
+  }
+  .combat-3D {
+    transform: perspective(400px) rotateX(15deg);
+  }
+
   .display-player-stats,
   .display-enemy-stats {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     height: 100%;
-    width: 320px;
+    width: 330px;
     margin: 0 10px;
     background: rgba(0, 0, 0, 0.7);
     border: 3px solid white;
@@ -104,22 +201,20 @@ body {
   }
 }
 
-
 // CASE SELECTOR AND CASE STYLED AREAS
 .initial-square {
-  background: rgb(48, 178, 113);
-  outline: 3px ridge #1c6ea4;
-  outline-offset: 0px;
+  background: rgba(8, 106, 21, 0.3);
 }
 // Hovered Cases
 .selected-square {
-  background: rgb(56, 180, 60);
-  outline: 5px ridge #26581b;
-  outline-offset: 0px;
+  background: rgb(56, 114, 180);
+  &:hover {
+    background: rgba(8, 234, 80, 0.6);
+  }
 }
 // Movement Area Cases
 .possibleMov {
-  background: rgba(63, 146, 74, 0.5);
+  background: rgba(8, 106, 21, 0.6);
 }
 
 // Attack Area Cases
@@ -303,7 +398,7 @@ body {
   position: relative;
   background: #4b98cc;
   color: white;
-  width: 150px;
+  width: 160px;
   padding: 5px;
   margin: 5px auto;
   border-bottom-left-radius: 5px;
@@ -321,7 +416,12 @@ body {
     transform: scale(1.1);
   }
   .attack-line-text {
-    
+    width: 50px;
+    font-size: 12px;
+  }
+  .small {
+    width: 20px;
+    margin: 0 3px;
   }
 }
 

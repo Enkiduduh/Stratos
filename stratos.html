@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
+    <title>Stratos Js Version</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,7 +38,6 @@
         <div class="void"></div>
         <div class="display-player">
           <!-- vertical portrait player will be injected -->
-
         </div>
       </div>
       <div class="chess-container">
@@ -86,9 +85,16 @@
           <div class="display-player-stats player-3D">
             <!-- Stats player will be injected -->
           </div>
-          <div class="display-combat">
+          <div class="display-combat combat-3D">
             <!-- Combat infos will be injected -->
-
+            <div class="display-combat-box" id="combat-box-hero">
+              <!-- Combat infos PLAYER will be injected -->
+            </div>
+            <div class="startBattle">OK</div>
+            <!-- Combat infos will be injected -->
+            <div class="display-combat-box" id="combat-box-foe">
+              <!-- Combat infos FOE will be injected -->
+            </div>
           </div>
           <div class="display-enemy-stats enemy-3D">
             <!-- Stats enemy will be injected -->
@@ -116,6 +122,8 @@
       </div>
     </div>
 
-    <script type="module" src="stratos.js" async defer></script>
+    <script src="./stratos.js" async defer></script>
+    <script type="module" src="./gameLogic.js" async defer></script>
+    <script type="module" src="./characters.js" async defer></script>
   </body>
 </html>

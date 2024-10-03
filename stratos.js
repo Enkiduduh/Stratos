@@ -1,3 +1,5 @@
+// import { attackWeaponSelector } from "./gameLogic"
+
 const chessCases = document.querySelectorAll(".case");
 const imgHero = document.querySelector(".img-hero");
 const imgEnemy = document.querySelector(".img-enemy");
@@ -12,6 +14,8 @@ const yesBtn = document.querySelector(".yesBtn");
 const noBtn = document.querySelector(".noBtn");
 const inventoryBag = document.querySelector(".inventory-container");
 const attackBag = document.querySelector(".attack-container");
+const displayCombat = document.querySelector(".display-combat");
+displayCombat.style.display = "none";
 let endTurn = false;
 let isPlayerTurn = true; // Détermine si c'est le tour du joueur ou de l'ennemi
 let selectedWeaponName = null;
@@ -19,12 +23,12 @@ let selectedWeaponName = null;
 const player = {
   name: "Enki",
   tag: "hero",
-  level: 1,
-  hp: 10,
-  mp: 4,
-  str: 2,
-  def: 2,
-  agi: 2,
+  level: 12,
+  hp: 120,
+  mp: 30,
+  str: 25,
+  def: 20,
+  agi: 40,
   movePoints: 2,
   actionPoints: 1,
   img: 'assets/player_ryu1.png',
@@ -35,9 +39,8 @@ const player = {
   hasMoved: false,
   hasAttacked: false,
   weapons: [
-    { name: "Sword", range: 1, damage: 4, crit: 0.1 },
-    { name: "Punch", range: 1, damage: 2, crit: 0.5 },
-    { name: "Bow", range: 4, damage: 2, crit: 0.2 }
+    { name: "Sword", range: 1, damage: 35, crit: 0.1, attackNb: 1 },
+    { name: "Bow", range: 3, damage: 20, crit: 0.2, attackNb: 2 }
   ],
   inventory: [
     { name: "Potion", quantity: 5 },
@@ -48,12 +51,12 @@ const player = {
 const enemy = {
   name: "Undead",
   tag: "enemy",
-  level: 1,
-  hp: 10,
-  mp: 4,
-  str: 2,
-  def: 2,
-  agi: 2,
+  level: 15,
+  hp: 250,
+  mp: 20,
+  str: 50,
+  def: 30,
+  agi: 10,
   movePoints: 2,
   actionPoints: 1,
   img: 'assets/enemy.png',
@@ -64,8 +67,8 @@ const enemy = {
   hasMoved: false,
   hasAttacked: false,
   weapons: [
-    { name: "Sword", range: 1, damage: 4, crit: 0.1 },
-    { name: "Bow", range: 4, damage: 2, crit: 0.2 }
+    { name: "Sword", range: 1, damage: 35, crit: 0.1, attackNb: 1 },
+    { name: "Bow", range: 3, damage: 20, crit: 0.2, attackNb: 2 }
   ],
   inventory: [
     { name: "Potion", quantity: 5 },
@@ -83,7 +86,7 @@ function initalPos(char_obj, x, y) {
 }
 
 initalPos(player, 2, 2)
-initalPos(enemy, 5, 6)
+initalPos(enemy, 4, 5)
 
 
 function actionButtonsHandler(char_obj, char_case) {
@@ -95,11 +98,9 @@ function actionButtonsHandler(char_obj, char_case) {
       if (btn.classList.contains("attackBtn")) {
         attackHandler(char_obj);
         console.log(selectedWeaponName)
-        if (selectedWeaponName != null) {
-          console.log('Enter atk phase')
-          attackTarget(char_obj, selectedWeaponName)
-          console.log('Out atk phase')
-        }
+        // if (selectedWeaponName != null) {
+        //   attackTarget(char_obj, selectedWeaponName)
+        // }
       }
       if (btn.classList.contains("defendBtn")) {
         actionDefend(char_obj);
@@ -120,6 +121,7 @@ function initPlayer() {
   const playerCase = document.querySelector(`.case[data-x="${player.posX}"][data-y="${player.posY}"]`);
   const portraitPlayer = document.querySelector(".display-player");
   portraitPlayer.innerHTML = `<img src=${player.vertical_img} alt=${player.name} /> `;
+  playerCase.classList.add("heroTag");
   playerCase.innerHTML = `
   <div class="char-obj-case">
     <img src=${player.img} alt=${player.name}>
@@ -132,6 +134,7 @@ function initPlayer() {
   const enemyCase = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
   const portraitEnemy = document.querySelector(".display-enemy");
   portraitEnemy.innerHTML = `<img src=${enemy.vertical_img} alt=${enemy.name} /> `;
+  enemyCase.classList.add("enemyTag");
   enemyCase.innerHTML = `
   <div class="char-obj-case">
     <img src=${enemy.img} alt=${enemy.name}>
@@ -139,7 +142,7 @@ function initPlayer() {
         <div class="char-obj-case-life"><div>
     </div>
   </div>`;
-  displayCharFoeInfo(enemy);
+  displayCharFoeInfo(enemy, enemyCase);
   playerCase.addEventListener("click", () => {
     actionButtonsHandler(player, playerCase);
 
@@ -234,6 +237,7 @@ function actionEndTurn(char_obj) {
 
 function inventoryHandler(char_obj) {
   const inventory = char_obj.inventory;
+  displayCombat.style.display = "none";
   if (inventoryBag.textContent === "" || inventoryBag.style.display === 'none') {
     inventoryBag.style.display = "block";
     inventory.forEach((item) => {
@@ -251,16 +255,20 @@ function inventoryHandler(char_obj) {
   }
 }
 
-function attackWeaponSelector(element) {
+function attackWeaponSelector(element, char_obj) {
   // Vous pouvez maintenant accéder à l'élément cliqué et ses enfants
   const weaponName = element.querySelector('.attack-line-text').textContent;
   console.log(weaponName);
   selectedWeaponName = weaponName;
+  if (selectedWeaponName != null) {
+    attackTarget(char_obj, selectedWeaponName)
+  }
+
 }
 
 function attackHandler(char_obj) {
-  console.log("Test attack");
   const weapons = char_obj.weapons;
+
   if (attackBag.textContent === "" || attackBag.style.display === 'none') {
     attackBag.style.display = "block";
     weapons.forEach((weapon) => {
@@ -268,17 +276,22 @@ function attackHandler(char_obj) {
       attackLine.className = 'attack-line';
       attackLine.innerHTML = `
         <div class="attack-line-text">${weapon.name}</div>
-        <div class="attack-line-text">R: ${weapon.range}</div>
         <div class="attack-line-text">Dmg: ${weapon.damage}</div>
+        <div class="attack-line-text small">R: ${weapon.range}</div>
+        <div class="attack-line-text small">X ${weapon.attackNb}</div>
       `;
-      attackLine.addEventListener('click', () => attackWeaponSelector(attackLine));
+      attackLine.addEventListener('click', () => attackWeaponSelector(attackLine, char_obj));
       attackBag.appendChild(attackLine);
     });
   } else {
     // Reset attack display
+    displayCombat.innerHTML = '';
+    displayCombat.style.display = "none";
     attackBag.innerHTML = '';
     attackBag.style.display = "none";
-    console.log("Attack already displayed");
+    const allPossibleAttacks = document.querySelectorAll(".possibleAtk");
+    allPossibleAttacks.forEach(m => m.classList.remove("possibleAtk"));
+    console.log("Reset Attack display");
   }
 }
 
@@ -289,6 +302,7 @@ function actionDefend(char_obj) {
   }
   char_obj.def *= 2;
   char_obj.actionPoints -= 1;
+  displayCombat.style.display = "none";
   console.log(`${char_obj.name} sets on defensive state. Def up to ${char_obj.def}.`);
 }
 
@@ -297,6 +311,7 @@ console.log(movPoints)
 function attackTarget(char_obj, weaponChoice) {
   const actualPos = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY}"]`);
   const target = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
+  target.classList.add("enemyTag")
   if (char_obj.actionPoints < 1) {
     console.log("Not enough action points.");
     return;
@@ -306,56 +321,166 @@ function attackTarget(char_obj, weaponChoice) {
     return;
   }
   if (char_obj.actionPoints > 0) {
-    console.log(selectedWeaponName)
     let weaponRange = null;
+    const allPossibleAttacks = document.querySelectorAll(".possibleAtk");
+    allPossibleAttacks.forEach(m => m.classList.remove("possibleAtk"));
     const weapons = char_obj.weapons;
     const weaponBow = weapons.filter((weapon) => weapon.name.includes("Bow"));
     const weaponSword = weapons.filter((weapon) => weapon.name.includes("Sword"));
     if (weaponChoice == weaponSword[0].name) {
       weaponRange = weaponSword[0].range;
+      for (let i = 1; i <= weaponRange; i++) {
+        const posPlusMovX = document.querySelector(`.case[data-x="${char_obj.posX + i}"][data-y="${char_obj.posY}"]`);
+        const posPlusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY + i}"]`);
+        const posMinusMovX = document.querySelector(`.case[data-x="${char_obj.posX - i}"][data-y="${char_obj.posY}"]`);
+        const posMinusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY - i}"]`);
+        displayAttackArea(actualPos, char_obj, enemy, weaponSword[0], posPlusMovY, posPlusMovX, posMinusMovY, posMinusMovX)
+      }
     } else if (weaponChoice == weaponBow[0].name) {
       weaponRange = weaponBow[0].range;
+      for (let i = 1; i < weaponRange; i++) {
+        const posPlusMovX = document.querySelector(`.case[data-x="${char_obj.posX + i + 1}"][data-y="${char_obj.posY}"]`);
+        const posPlusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY + i + 1}"]`);
+        const posMinusMovX = document.querySelector(`.case[data-x="${char_obj.posX - i - 1}"][data-y="${char_obj.posY}"]`);
+        const posMinusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY - i - 1}"]`);
+        const posDiagNE1 = document.querySelector(`.case[data-x="${char_obj.posX + 2}"][data-y="${char_obj.posY + 1}"]`);
+        const posDiagNE2 = document.querySelector(`.case[data-x="${char_obj.posX + 1}"][data-y="${char_obj.posY + 2}"]`);
+        const posDiagNW1 = document.querySelector(`.case[data-x="${char_obj.posX - 2}"][data-y="${char_obj.posY + 1}"]`);
+        const posDiagNW2 = document.querySelector(`.case[data-x="${char_obj.posX - 1}"][data-y="${char_obj.posY + 2}"]`);
+        const posDiagSE1 = document.querySelector(`.case[data-x="${char_obj.posX + 2}"][data-y="${char_obj.posY - 1}"]`);
+        const posDiagSE2 = document.querySelector(`.case[data-x="${char_obj.posX + 1}"][data-y="${char_obj.posY - 2}"]`);
+        const posDiagSW1 = document.querySelector(`.case[data-x="${char_obj.posX - 2}"][data-y="${char_obj.posY - 1}"]`);
+        const posDiagSW2 = document.querySelector(`.case[data-x="${char_obj.posX - 1}"][data-y="${char_obj.posY - 2}"]`);
+        displayAttackArea(actualPos, char_obj, enemy, weaponBow[0],
+          posPlusMovY, posPlusMovX, posMinusMovY, posMinusMovX,
+          posDiagNE1, posDiagNE2, posDiagNW1, posDiagNW2,
+          posDiagSE1, posDiagSE2, posDiagSW1, posDiagSW2)
+      }
+
     } else {
       console.log("Error in weapon name...")
     }
-
-    for (let i = 0; i <= weaponRange; i++) {
-      const posPlusMovX = document.querySelector(`.case[data-x="${char_obj.posX + i}"][data-y="${char_obj.posY}"]`);
-      const posPlusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY + i}"]`);
-      const posMinusMovX = document.querySelector(`.case[data-x="${char_obj.posX - i}"][data-y="${char_obj.posY}"]`);
-      const posMinusMovY = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY - i}"]`);
-
-      // Add the class "possibleMov"
-      if (posPlusMovX) posPlusMovX.classList.add("possibleAtk");
-      if (posPlusMovY) posPlusMovY.classList.add("possibleAtk");
-      if (posMinusMovX) posMinusMovX.classList.add("possibleAtk");
-      if (posMinusMovY) posMinusMovY.classList.add("possibleAtk");
-      actualPos.classList.remove("possibleAtk");
-
-      const attacks = [posPlusMovX, posPlusMovY, posMinusMovX, posMinusMovY];
-      attacks.forEach((attack) => {
-        if (attack) {
-          attack.addEventListener("click", () => {
-            console.log("Attack this case!")
-          });
-        }
-      })
-
-
-
-    }
   }
 }
-const weapons = player.weapons
-const testWpn = "Bow";
-let testRange = null;
-const weaponBow = weapons.filter((weapon) => weapon.name.includes("Bow"));
-console.log(weaponBow[0].name == "Bow")
-if (testWpn == weaponBow[0].name) {
-  testRange = weaponBow[0].range;
+
+
+function displayAttackArea(initialPosition, char_obj, char_target, weaponChoice, ...positions) {
+  positions.forEach(pos => {
+    if (pos) {
+      pos.classList.add("possibleAtk");
+    }
+  })
+  initialPosition.classList.remove("possibleAtk");
+  const attacks = [...positions];
+  attacks.forEach((attack) => {
+    if (attack) {
+      attack.addEventListener("click", () => {
+        if (attack.classList.contains('enemyTag')) {
+          console.log('Attack possible');
+          console.log('Target contains an enemy');
+          displayAttackBattleInfo(char_obj, char_target, weaponChoice)
+        } else {
+          console.log('Attack impossible');
+          console.log('Target does not contain an enemy');
+        }
+      });
+    }
+  })
 }
-console.log(testRange)
-console.log(testWpn)
+
+
+const rngCrit = Math.floor((Math.random() * 100) + 1);
+console.log(rngCrit)
+function displayAttackBattleInfo(char_obj, char_target, weaponChoice) {
+  displayCombat.style.display = "flex";
+  const startBattle = document.querySelector(".startBattle");
+  const boxHero = document.getElementById("combat-box-hero");
+  const boxFoe = document.getElementById("combat-box-foe");
+
+  const hitRate = char_obj.agi * 2;
+  const nbAttacks = weaponChoice.attackNb;
+  let damage = weaponChoice.damage;
+  const critAttack = weaponChoice.crit * 100;
+  const rngCrit1 = Math.floor((Math.random() * 100) + 1);
+  const rngCrit2 = Math.floor((Math.random() * 100) + 1);
+
+  const def = char_target.def;
+  const hpLost = char_target.hp - (weaponChoice.damage * weaponChoice.attackNb);
+  const blockRate = (char_target.hp + char_target.str + char_target.def) / 20;
+  const fleeRate = char_target.agi;
+
+
+
+
+  boxHero.innerHTML = `
+  <div class="display-combat-box-hit">
+  <div class="display-combat-box-hit-name">HIT</div>
+  <div class="display-combat-box-hit-value">${hitRate}%</div>
+  </div>
+  <div class="display-combat-box-stat">
+      <div class="display-combat-box-stat-line-box hero">
+        <div class="display-combat-box-stat-line">${nbAttacks}</div>
+        <div class="display-combat-box-stat-line-stat">ATK</div>
+      </div>
+      <div class="display-combat-box-stat-line-box hero">
+        <div class="display-combat-box-stat-line">${weaponChoice.damage}</div>
+        <div class="display-combat-box-stat-line-stat">DMG</div>
+      </div>
+      <div class="display-combat-box-stat-line-box hero">
+        <div class="display-combat-box-stat-line">${critAttack} </div>
+        <div class="display-combat-box-stat-line-stat">CRI</div>
+      </div>
+    </div>
+  `;
+  boxFoe.innerHTML = `
+  <div class="display-combat-box-stat">
+    <div class="display-combat-box-stat-line-box foe">
+      <div class="display-combat-box-stat-line-stat">DEF</div>
+      <div class="display-combat-box-stat-line">${def}</div>
+    </div>
+    <div class="display-combat-box-stat-line-box foe">
+      <div class="display-combat-box-stat-line-stat">HP</div>
+      <div class="display-combat-box-stat-line">${hpLost}</div>
+    </div>
+    <div class="display-combat-box-stat-line-box foe">
+      <div class="display-combat-box-stat-line-stat">BLC</div>
+      <div class="display-combat-box-stat-line">${blockRate}%</div>
+    </div>
+  </div>
+  <div class="display-combat-box-hit">
+    <div class="display-combat-box-hit-name">FLEE</div>
+    <div class="display-combat-box-hit-value">${fleeRate}%</div>
+  </div>
+</div>
+  `;
+
+  startBattle.addEventListener("click", () => {
+    console.log("Animation Battle Starts")
+    const allPossibleAttacks = document.querySelectorAll(".possibleAtk");
+    allPossibleAttacks.forEach(m => m.classList.remove("possibleAtk"));
+    if (rngCrit1 <= critAttack) {
+      damage = (weaponChoice.damage * 1.5) * nbAttacks;
+      console.log("Critical Hit")
+    } else {
+      damage = weaponChoice.damage * nbAttacks;
+    }
+
+    const updateHpLost = damage;
+
+    if (rngCrit2 <= fleeRate) {
+      char_target.hp = char_target.hp;
+      console.log("Flee Successed")
+    } else {
+      const hpLost = updateHpLost - (updateHpLost * (blockRate / 100)) ;
+      char_target.hp -= Math.round(hpLost);
+      console.log("Flee Failed");
+    }
+    displayCharFoeInfo(enemy);
+  });
+}
+
+
+
 
 function targetMovement(char_obj, char_case) {
   const actualPos = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY}"]`);
