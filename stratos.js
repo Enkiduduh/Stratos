@@ -20,6 +20,9 @@ let endTurn = false;
 let isPlayerTurn = true; // Détermine si c'est le tour du joueur ou de l'ennemi
 let selectedWeaponName = null;
 
+const actionPlayerInBattle = document.querySelector(".player-action");
+const attackCommand = document.getElementById("attackCommand");
+
 const player = {
   name: "Enki",
   tag: "hero",
@@ -471,7 +474,7 @@ function displayAttackBattleInfo(char_obj, char_target, weaponChoice) {
       char_target.hp = char_target.hp;
       console.log("Flee Successed")
     } else {
-      const hpLost = updateHpLost - (updateHpLost * (blockRate / 100)) ;
+      const hpLost = updateHpLost - (updateHpLost * (blockRate / 100));
       char_target.hp -= Math.round(hpLost);
       console.log("Flee Failed");
     }
@@ -481,7 +484,23 @@ function displayAttackBattleInfo(char_obj, char_target, weaponChoice) {
 }
 
 
+//TEST SCREEN BATTLE //
 
+//  actionPlayerInBattle
+//  attackCommand
+
+attackCommand.addEventListener("click", () => {
+  actionPlayerInBattle.classList.add("actionSlash")
+  setTimeout(() => {
+    actionPlayerInBattle.classList.remove("actionSlash")
+    actionPlayerInBattle.style.left = "0px"
+  }, "1000");
+});
+
+
+
+
+//TEST SCREEN BATTLE //
 
 function targetMovement(char_obj, char_case) {
   const actualPos = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY}"]`);
