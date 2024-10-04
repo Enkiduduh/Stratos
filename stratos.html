@@ -13,7 +13,6 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Lilita+One&family=Macondo&family=Pirata+One&display=swap"
       rel="stylesheet"
     />
-
     <link rel="stylesheet" href="stratos.css" />
   </head>
 
@@ -41,6 +40,28 @@
         </div>
       </div>
       <div class="chess-container">
+        <!-- Battle animation will be here and set on position absolute -->
+        <div class="battle-animation-container">
+          <div class="battle-animation-display-container">
+            <div class="battle-animation-display-char player-bg-char"></div>
+            <div class="battle-animation-display-scene">
+              <div class="battle-animation-display-scene-action"><img src="./assets/player_ryu1.png" alt="Player"></div>
+              <div class="battle-animation-display-scene-action"><img src="./assets/enemy.png" alt="Enemy"></div>
+            </div>
+            <div class="battle-animation-display-char enemy-bg-char"></div>
+          </div>
+          <div class="battle-animation-stats-container">
+            <div class="battle-animation-stats">
+              <div class="battle-animation-stats-info"></div>
+              <div class="battle-animation-stats-life"></div>
+            </div>
+            <div class="battle-animation-stats">
+              <div class="battle-animation-stats-info"></div>
+              <div class="battle-animation-stats-life"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Battle animation will be here and set on position absolute -->
         <div class="chess-board">
           <div class="chess">
             <div class="case" data-x="1" data-y="6"></div>

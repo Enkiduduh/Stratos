@@ -475,6 +475,7 @@ function displayAttackBattleInfo(char_obj, char_target, weaponChoice) {
       char_target.hp -= Math.round(hpLost);
       console.log("Flee Failed");
     }
+    char_obj.actionPoints -= 1;
     displayCharFoeInfo(enemy);
   });
 }

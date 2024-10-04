@@ -105,10 +105,9 @@ body {
           display: flex;
           justify-content: center;
           align-items: center;
-          background:black;
+          background: black;
           border-top-right-radius: 5px;
           border-top-left-radius: 5px;
-
         }
         .display-combat-box-hit-value {
           font-size: 20px;
@@ -450,5 +449,87 @@ body {
     background: #1c6ea4;
     cursor: pointer;
     transform: scale(1.1);
+  }
+}
+
+// Battle animation Frame
+
+.battle-animation-container {
+  width: 600px;
+  height: 300px;
+  border: 1px solid white;
+
+  .battle-animation-display-container {
+    width: 600px;
+    height: 200px;
+    border: 1px solid white;
+    display: flex;
+    align-items: flex-end;
+    .battle-animation-display-char {
+      width: 80px;
+      height: 100px;
+      border: 1px solid white;
+
+    }
+
+    .player-bg-char {
+      background-image: url("./assets/vertical_portrait_ryu_v2.png");
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .enemy-bg-char {
+      background-image: url("./assets/vertical_portrait_skeleton_v3.png");
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    .battle-animation-display-scene {
+      width: 440px;
+      height: 160px;
+      border: 1px solid white;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      padding: 0 0 20px 0;
+
+      .battle-animation-display-scene-action {
+
+      }
+    }
+  }
+
+  .battle-animation-stats-container {
+    width: 600px;
+    height: 100px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .battle-animation-stats {
+      width: 270px;
+      height: 80px;
+      margin: 10px;
+      border: 1px solid white;
+      display: flex;
+      flex-direction: column;
+
+
+      .battle-animation-stats-info {
+        width: 250px;
+        height: 40px;
+        background: lightblue;
+        margin: 5px auto;
+      }
+
+      .battle-animation-stats-life {
+        width: 250px;
+        height: 20px;
+        background: green;
+        margin: 5px auto;
+      }
+    }
   }
 }
