@@ -434,16 +434,15 @@ body {
 
 .battle-animation-container {
   width: 500px;
-  height: 280px;
-  border: 1px solid white;
+  height: 220px;
   margin: 0 auto;
+  font-family: "Macondo", cursive;
 }
 .battle-animation-container .battle-animation-display-container {
   width: 500px;
-  height: 180px;
+  height: 166px;
   border: 1px solid white;
   display: flex;
-  align-items: flex-end;
 }
 .battle-animation-container .battle-animation-display-container .battle-animation-display-char {
   width: 80px;
@@ -455,12 +454,17 @@ body {
 }
 .battle-animation-container .battle-animation-display-container .battle-animation-display-char .name-char {
   color: white;
-  font-family: "Macondo", cursive;
   font-weight: 600;
   text-shadow: 3px 3px 5px rgb(255, 38, 0);
   background: black;
   width: 100%;
   text-align: center;
+}
+.battle-animation-container .battle-animation-display-container .weapon-char {
+  background: yellow;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .battle-animation-container .battle-animation-display-container .player-bg-char {
   background-image: url("./assets/vertical_portrait_ryu_v2.png");
@@ -522,13 +526,141 @@ body {
   height: 32px;
   top: 10px;
   left: -5px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .hitbox-normal {
   background-image: url("./assets/test_hit.png");
-  animation-name: playerMoves;
+  animation-name: normalDamageReceived;
   animation-duration: 0.5s;
   transform: scale(1.9);
   animation-timing-function: steps(4);
 }
-@keyframes playerMoves {
+@keyframes normalDamageReceived {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 -130px;
+  }
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .enemy-action {
+  transition: left 0.1s ease-in;
+  left: 0px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .enemy-action:hover {
+  left: 3px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .shaked {
+  left: 3px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .battle-animation-display-scene-action-critical {
+  position: absolute;
+  z-index: 55;
+  width: 64px;
+  height: 34px;
+  top: -40px;
+  left: -5px;
+  padding: 5px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: red;
+  text-shadow: 0 -1px 4px #fff, 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #f00;
+  text-align: center;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .hitbox-critical {
+  background-image: url("./assets/test_hit.png");
+  animation-name: criticalDamageReceived;
+  animation-duration: 0.5s;
+  transform: scale(3);
+  animation-timing-function: steps(4);
+}
+@keyframes criticalDamageReceived {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 -130px;
+  }
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .battle-animation-display-scene-action-block {
+  position: absolute;
+  z-index: 55;
+  width: 64px;
+  height: 34px;
+  top: -40px;
+  left: -5px;
+  padding: 5px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(43, 102, 170);
+  text-shadow: 0 -1px 4px #fff, 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #f00;
+  text-align: center;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .enemy-action-block {
+  transition: left 0.1s ease-in;
+  left: 0px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .enemy-action-block:hover {
+  left: 3px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .blocked {
+  left: -3px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .hitbox-block {
+  background-image: url("./assets/test_hit.png");
+  animation-name: blockDamageReceived;
+  animation-duration: 0.5s;
+  transform: scale(1);
+  animation-timing-function: steps(4);
+}
+@keyframes blockDamageReceived {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 -130px;
+  }
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .battle-animation-display-scene-action-flee {
+  position: absolute;
+  z-index: 55;
+  width: 64px;
+  height: 34px;
+  top: -40px;
+  left: -5px;
+  padding: 5px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: rgb(83, 29, 140);
+  text-shadow: 0 -1px 4px #fff, 0 -2px 10px #ff0, 0 -10px 20px #ff8000, 0 -18px 40px #f00;
+  text-align: center;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .hitbox-flee {
+  background-image: url("./assets/test_hit.png");
+  animation-name: fleeDamageReceived;
+  animation-duration: 0.5s;
+  transform: scale(1);
+  animation-timing-function: steps(4);
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .enemy-action-flee {
+  transition: left 0.1s ease-in;
+  left: 0px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .enemy-action-flee:hover {
+  left: 15px;
+}
+.battle-animation-container .battle-animation-display-container .battle-animation-display-scene .flee {
+  left: 15px;
+}
+@keyframes fleeDamageReceived {
   from {
     background-position: 0 0;
   }
@@ -563,7 +695,7 @@ body {
 }
 .battle-animation-container .battle-animation-stats-container {
   width: 500px;
-  height: 100px;
+  height: 50px;
   border: 1px solid white;
   display: flex;
   justify-content: space-between;
@@ -571,21 +703,20 @@ body {
 }
 .battle-animation-container .battle-animation-stats-container .battle-animation-stats {
   width: 220px;
-  height: 80px;
   margin: 10px;
-  border: 1px solid white;
   display: flex;
-  flex-direction: column;
 }
-.battle-animation-container .battle-animation-stats-container .battle-animation-stats .battle-animation-stats-info {
-  width: 220px;
-  height: 40px;
-  background: lightblue;
-  margin: 5px auto;
-}
-.battle-animation-container .battle-animation-stats-container .battle-animation-stats .battle-animation-stats-life {
-  width: 220px;
+.battle-animation-container .battle-animation-stats-container .battle-animation-stats .battle-animation-stats-life-container {
+  width: 200px;
   height: 20px;
+  background: white;
+  border: 3px solid black;
+  border-radius: 10px;
+}
+.battle-animation-container .battle-animation-stats-container .battle-animation-stats .battle-animation-stats-life-container .battle-animation-stats-life {
   background: green;
-  margin: 5px auto;
+  width: 100%;
+  height: 20px;
+  border-radius: 7px;
+  transition: width 0.8s ease-in-out;
 }/*# sourceMappingURL=stratos.css.map */

@@ -43,40 +43,60 @@
         <!-- Battle animation will be here and set on position absolute -->
         <div class="battle-animation-container">
           <div class="battle-animation-display-container">
-            <div class="battle-animation-display-char player-bg-char">
-              <div class="name-char">Ryu</div>
+            <div>
+              <div class="battle-animation-display-char player-bg-char">
+                <div class="name-char">Ryu</div>
+              </div>
+              <div class="weapon-char">Sword</div>
+              <div class="weapon-attributs">D:2 R:1 A:2</div>
             </div>
             <div class="battle-animation-display-scene">
               <div class="battle-animation-display-scene-action player-action">
                 <img src="./assets/player_ryu1.png" alt="Player" />
                 <div class="battle-animation-display-scene-action-shadow"></div>
+                <!-- <div class="battle-animation-display-scene-action-hitbox player-hitbox"></div> -->
               </div>
-              <div class="battle-animation-display-scene-action">
+              <div class="battle-animation-display-scene-action enemy-action">
                 <img src="./assets/enemy.png" alt="Enemy" id="enemy-img" />
                 <div class="battle-animation-display-scene-action-shadow"></div>
-                <div class="battle-animation-display-scene-action-hitbox enemy-hitbox"></div>
+                <div class="battle-animation-display-scene-action-hitbox"></div>
+                <div class="battle-animation-display-scene-action-critical">
+                  CRITICAL
+                </div>
+                <div class="battle-animation-display-scene-action-block">
+                  BLOCK
+                </div>
+                <div class="battle-animation-display-scene-action-flee">
+                  MISS
+                </div>
               </div>
               <div class="battle-animation-display-scene-field"></div>
               <div class="battle-animation-display-scene-underfield"></div>
             </div>
-            <div class="battle-animation-display-char enemy-bg-char">
-              <div class="name-char">Undead</div>
+            <div>
+              <div class="battle-animation-display-char enemy-bg-char">
+                <div class="name-char">Undead</div>
+              </div>
+              <div class="weapon-char">Sword</div>
+              <div class="weapon-attributs">D:2 R:1 A:2</div>
             </div>
           </div>
           <div class="battle-animation-stats-container">
             <div class="battle-animation-stats">
-              <div class="battle-animation-stats-info"></div>
-              <div class="battle-animation-stats-life"></div>
+              <div class="battle-animation-stats-life-container">
+                <div class="battle-animation-stats-life player-life"></div>
+              </div>
             </div>
             <div>
-              <button id="attackCommand">A</button>
-              <button id="attackCommand">C</button>
-              <button id="attackCommand">B</button>
-              <button id="attackCommand">F</button>
+              <button id="attackCommandNormal">A</button>
+              <button id="attackCommandCritical">C</button>
+              <button id="attackCommandBlock">B</button>
+              <button id="attackCommandFlee">F</button>
             </div>
             <div class="battle-animation-stats">
-              <div class="battle-animation-stats-info"></div>
-              <div class="battle-animation-stats-life"></div>
+              <div class="battle-animation-stats-life-container">
+                <div class="battle-animation-stats-life enemy-life"></div>
+              </div>
             </div>
           </div>
         </div>
