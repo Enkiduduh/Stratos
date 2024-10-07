@@ -135,7 +135,8 @@ function actionButtonsHandler(char_obj, char_case) {
 function initPlayer() {
   const playerCase = document.querySelector(`.case[data-x="${player.posX}"][data-y="${player.posY}"]`);
   const portraitPlayer = document.querySelector(".display-player");
-  portraitPlayer.innerHTML = `<img src=${player.vertical_img} alt=${player.name} /> `;
+  portraitPlayer.innerHTML = `<img src=${player.vertical_img} alt=${player.name} class="vertical-portrait-hero"/>
+  <div class="abs-image"></div> `;
   playerCase.classList.add("heroTag");
   playerCase.innerHTML = `
   <div class="char-obj-case">
@@ -148,7 +149,7 @@ function initPlayer() {
 
   const enemyCase = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
   const portraitEnemy = document.querySelector(".display-enemy");
-  portraitEnemy.innerHTML = `<img src=${enemy.vertical_img} alt=${enemy.name} /> `;
+  portraitEnemy.innerHTML = `<img src=${enemy.vertical_img} alt=${enemy.name} class="vertical-portrait-foe"/><div class="abs-image"></div> `;
   enemyCase.classList.add("enemyTag");
   enemyCase.innerHTML = `
   <div class="char-obj-case">
@@ -169,7 +170,7 @@ function initEnemy() {
   const enemyCase = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
   enemyCase.innerHTML = `
   <div class="char-obj-case">
-    <img src=${enemy.img} alt=${enemy.name}>
+    <img src=${enemy.img} alt=${enemy.name} class="vertical-portrait-foe"/><div class="abs-image"></div>
     <div class="char-obj-case-life-container">
         <div class="char-obj-case-life"><div>
     </div>
@@ -529,6 +530,7 @@ async function animationBattleScreen(playerAction, enemyAction, actionCmd, char_
   battleScreen.style.display = "flex";
   setTimeout(() => {
     battleScreen.style.display = "none";
+    displayCombat.style.display = "none";
   }, 3000);
 
   await delay(400);
@@ -744,6 +746,9 @@ function displayCharHeroInfo(char_obj) {
           <div class="display-player-stats-infos">DEF: ${char_obj.def}</div>
           <div class="display-player-stats-infos">AGI: ${char_obj.agi}</div>
         </div>
+        <div class="bg_display-stats"></div>
+        <div class="bg_ornement_top_display-stats"></div>
+        <div class="bg_ornement_bottom_display-stats"></div>
     `;
   }
 }
@@ -768,6 +773,9 @@ function displayCharFoeInfo(char_obj) {
         <div class="display-enemy-stats-infos">Level: ${char_obj.level}</div>
         <div class="display-enemy-stats-infos">AC: ${char_obj.actionPoints}</div>
       </div>
+      <div class="bg_display-stats"></div>
+      <div class="bg_ornement_top_display-stats"></div>
+        <div class="bg_ornement_bottom_display-stats"></div>
   `;
 }
 
