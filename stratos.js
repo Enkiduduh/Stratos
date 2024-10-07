@@ -15,17 +15,18 @@ const noBtn = document.querySelector(".noBtn");
 const inventoryBag = document.querySelector(".inventory-container");
 const attackBag = document.querySelector(".attack-container");
 const displayCombat = document.querySelector(".display-combat");
+const battleScreen = document.querySelector(".battle-screen-modal");
 displayCombat.style.display = "none";
 let endTurn = false;
 let isPlayerTurn = true; // Détermine si c'est le tour du joueur ou de l'ennemi
 let selectedWeaponName = null;
 
-const actionPlayerInBattle = document.querySelector(".player-action");
-const attackNormal = document.getElementById("attackCommandNormal");
-const attackCritical = document.getElementById("attackCommandCritical");
-const attackBlock = document.getElementById("attackCommandBlock");
-const attackFlee = document.getElementById("attackCommandFlee");
-const actionEnemyInBattle = document.querySelector(".enemy-action");
+// const actionPlayerInBattle = document.querySelector(".player-action");
+// const attackNormal = document.getElementById("attackCommandNormal");
+// const attackCritical = document.getElementById("attackCommandCritical");
+// const attackBlock = document.getElementById("attackCommandBlock");
+// const attackFlee = document.getElementById("attackCommandFlee");
+// const actionEnemyInBattle = document.querySelector(".enemy-action");
 
 const player = {
   name: "Enki",
@@ -38,6 +39,7 @@ const player = {
   agi: 40,
   movePoints: 2,
   actionPoints: 1,
+  alive: true,
   img: 'assets/player_ryu1.png',
   vertical_img: 'assets/vertical_portrait_ryu_v2.png',
   posX: null,
@@ -66,6 +68,7 @@ const enemy = {
   agi: 10,
   movePoints: 2,
   actionPoints: 1,
+  alive: true,
   img: 'assets/enemy.png',
   vertical_img: 'assets/vertical_portrait_skeleton_v3.png',
   posX: null,
@@ -83,6 +86,11 @@ const enemy = {
     { name: "Elixir", quantity: 1 }
   ],
 }
+
+const EnemyTarget = {
+  hp: enemy.hp
+};
+const immutableTargetMaxHp = Object.freeze({ ...EnemyTarget });
 
 const initialDefPlayer = player.def;
 const initialDefEnemy = enemy.def;
@@ -408,8 +416,6 @@ function displayAttackBattleInfo(char_obj, char_target, weaponChoice) {
   const nbAttacks = weaponChoice.attackNb;
   let damage = weaponChoice.damage;
   const critAttack = weaponChoice.crit * 100;
-  const rngCrit1 = Math.floor((Math.random() * 100) + 1);
-  const rngCrit2 = Math.floor((Math.random() * 100) + 1);
 
   const def = char_target.def;
   const hpLost = char_target.hp - (weaponChoice.damage * weaponChoice.attackNb);
@@ -459,125 +465,169 @@ function displayAttackBattleInfo(char_obj, char_target, weaponChoice) {
   `;
 
   startBattle.addEventListener("click", () => {
+    const actionPlayerInBattle = document.querySelector(".player-action");
+    const actionEnemyInBattle = document.querySelector(".enemy-action");
+
+    let actionCommand = "";
     console.log("Animation Battle Starts")
     const allPossibleAttacks = document.querySelectorAll(".possibleAtk");
     allPossibleAttacks.forEach(m => m.classList.remove("possibleAtk"));
-    if (rngCrit1 <= critAttack) {
-      damage = (weaponChoice.damage * 1.5) * nbAttacks;
-      console.log("Critical Hit")
-    } else {
-      damage = weaponChoice.damage * nbAttacks;
-    }
-
-    const updateHpLost = damage;
-
-    if (rngCrit2 <= fleeRate) {
-      char_target.hp = char_target.hp;
+    if (char_target.def > char_obj.str * 2) {
+      damage = 0;
+      console.log("Attack Successfully Blocked")
+      actionCommand = "block";
+    } else if (Math.floor((Math.random() * 100) + 1) <= fleeRate) {
+      damage = 0;
       console.log("Flee Successed")
+      actionCommand = "flee";
     } else {
+      if (Math.floor((Math.random() * 100) + 1) <= critAttack) {
+        damage = (weaponChoice.damage * 1.5) * nbAttacks;
+        console.log("Critical Hit")
+        actionCommand = "critical";
+      } else {
+        damage = weaponChoice.damage * nbAttacks;
+        actionCommand = "normal";
+
+      }
+      const updateHpLost = damage;
       const hpLost = updateHpLost - (updateHpLost * (blockRate / 100));
+      const maxTargetHp = immutableTargetMaxHp.hp;
+      console.log(maxTargetHp)
       char_target.hp -= Math.round(hpLost);
+      const targetHpLeft = char_target.hp
+      console.log(targetHpLeft)
       console.log("Flee Failed");
+      animationBattleScreen(actionPlayerInBattle, actionEnemyInBattle, actionCommand, maxTargetHp, targetHpLeft)
     }
     char_obj.actionPoints -= 1;
     displayCharFoeInfo(enemy);
   });
 }
 
+async function displayModalBattleScreen() {
+  await delay(100);
 
+}
+///////////////////////
 //TEST SCREEN BATTLE //
 
+//   playerAction = actionPlayerInBattle
+//   enemyAction = actionEnemyInBattle
 
-const enemyHitbox = document.querySelector(".battle-animation-display-scene-action-hitbox");
-const enemeyLife = document.querySelector(".enemy-life");
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+async function animationBattleScreen(playerAction, enemyAction, actionCmd, char_hp, hpLeft) {
 
-//NORMAL ATTACK - TEST SCREEN BATTLE //
-attackNormal.addEventListener("click", () => {
-  enemeyLife.classList.add("hit");
+  const enemyHitbox = document.querySelector(".battle-animation-display-scene-action-hitbox");
+  const enemyLife = document.querySelector(".enemy-life");
+  enemyLife.classList.add("hit");
   const hit = document.querySelector(".hit");
-  actionPlayerInBattle.classList.add("actionSlash")
-  setTimeout(() => {
-    enemyHitbox.classList.add("hitbox-normal");
-    actionEnemyInBattle.classList.add("shaked");
-  }, 300);
-  setTimeout(() => {
-    // enemeyLife.style.width = `${100 - 10}%`;
-    hit.style.width = `${100 - 40}%`;
-  }, 400);
-  setTimeout(() => {
-    enemyHitbox.classList.remove("hitbox-normal");
-  }, 800);
-  setTimeout(() => {
-    actionPlayerInBattle.style.left = "0px";
-    actionPlayerInBattle.classList.remove("actionSlash");
-    actionEnemyInBattle.classList.remove("shaked");
-  }, 600);
-});
 
-//CRITICAL ATTACK - TEST SCREEN BATTLE //
-attackCritical.addEventListener("click", () => {
-  const messageCritical = document.querySelector(".battle-animation-display-scene-action-critical")
-  actionPlayerInBattle.classList.add("actionSlash")
+  await delay(20);
+  battleScreen.style.display = "flex";
   setTimeout(() => {
-    enemyHitbox.classList.add("hitbox-critical");
-    actionEnemyInBattle.classList.add("shaked");
-    messageCritical.style.display = "flex";
-  }, 300);
-  setTimeout(() => {
-    enemyHitbox.classList.remove("hitbox-critical")
-    messageCritical.style.display = "none";
+    battleScreen.style.display = "none";
+  }, 3000);
 
-  }, 800);
-  setTimeout(() => {
-    actionPlayerInBattle.style.left = "0px";
-    actionPlayerInBattle.classList.remove("actionSlash");
-    actionEnemyInBattle.classList.remove("shaked");
-  }, 600);
-});
+  await delay(400);
+  //NORMAL ATTACK - TEST SCREEN BATTLE //
+  if (actionCmd == "normal") {
+    playerAction.classList.add("actionSlash")
+    setTimeout(() => {
+      enemyHitbox.classList.add("hitbox-normal");
+      enemyAction.classList.add("shaked");
+    }, 500);
+    setTimeout(() => {
+      if (parseInt(hit.style.width) <= 50) {
+        enemyLife.style.background = "orange";
+      } else if (parseInt(hit.style.width) <= 20) {
+        enemyLife.style.background = "red";
+      }
+      hit.style.width = `${Math.round(((hpLeft) * 100) / char_hp)}%`;
+    }, 600);
+    setTimeout(() => {
+      enemyHitbox.classList.remove("hitbox-normal");
+    }, 1000);
+    setTimeout(() => {
+      playerAction.classList.remove("actionSlash");
+      enemyAction.classList.remove("shaked");
+    }, 800);
+    actionCmd = "";
+  }
 
-//BLOCK ATTACK - TEST SCREEN BATTLE //
-attackBlock.addEventListener("click", () => {
-  const messageBlock = document.querySelector(".battle-animation-display-scene-action-block")
-  actionPlayerInBattle.classList.add("actionSlash")
-  setTimeout(() => {
-    enemyHitbox.classList.add("hitbox-block");
-    actionEnemyInBattle.classList.add("blocked");
-    messageBlock.style.display = "flex";
-  }, 300);
-  setTimeout(() => {
-    enemyHitbox.classList.remove("hitbox-block");
-    messageBlock.style.display = "none";
-  }, 800);
-  setTimeout(() => {
-    actionPlayerInBattle.style.left = "0px";
-    actionPlayerInBattle.classList.remove("actionSlash");
-    actionEnemyInBattle.classList.remove("blocked");
-  }, 600);
-});
+  // //CRITICAL ATTACK - TEST SCREEN BATTLE //
+  if (actionCmd == "critical") {
+    const messageCritical = document.querySelector(".battle-animation-display-scene-action-critical")
+    playerAction.classList.add("actionSlash")
+    setTimeout(() => {
+      enemyHitbox.classList.add("hitbox-critical");
+      enemyAction.classList.add("shaked");
+      messageCritical.style.display = "flex";
+    }, 300);
+    setTimeout(() => {
+      if (parseInt(hit.style.width) <= 50) {
+        enemyLife.style.background = "orange";
+      } else if (parseInt(hit.style.width) <= 20) {
+        enemyLife.style.background = "red";
+      }
+      hit.style.width = `${Math.round(((hpLeft) * 100) / char_hp)}%`;
+    }, 400);
+    setTimeout(() => {
+      enemyHitbox.classList.remove("hitbox-critical")
+      messageCritical.style.display = "none";
 
-//FLEE ATTACK - TEST SCREEN BATTLE //
-attackFlee.addEventListener("click", () => {
-  const messageFlee = document.querySelector(".battle-animation-display-scene-action-flee")
-  actionPlayerInBattle.classList.add("actionSlash")
-  setTimeout(() => {
-    enemyHitbox.classList.add("hitbox-flee");
-    actionEnemyInBattle.classList.add("flee");
-    messageFlee.style.display = "flex";
-  }, 300);
-  setTimeout(() => {
-    enemyHitbox.classList.remove("hitbox-flee");
-    messageFlee.style.display = "none";
-  }, 800);
-  setTimeout(() => {
-    actionPlayerInBattle.style.left = "0px";
-    actionPlayerInBattle.classList.remove("actionSlash");
-    actionEnemyInBattle.classList.remove("flee");
-  }, 600);
-});
+    }, 800);
+    setTimeout(() => {
+      playerAction.classList.remove("actionSlash");
+      enemyAction.classList.remove("shaked");
+    }, 600);
+    actionCmd = "";
+  }
 
+  // //BLOCK ATTACK - TEST SCREEN BATTLE //
+  if (actionCmd == "block") {
+    const messageBlock = document.querySelector(".battle-animation-display-scene-action-block")
+    playerAction.classList.add("actionSlash")
+    setTimeout(() => {
+      enemyHitbox.classList.add("hitbox-block");
+      enemyAction.classList.add("blocked");
+      messageBlock.style.display = "flex";
+    }, 300);
+    setTimeout(() => {
+      enemyHitbox.classList.remove("hitbox-block");
+      messageBlock.style.display = "none";
+    }, 800);
+    setTimeout(() => {
+      playerAction.classList.remove("actionSlash");
+      enemyAction.classList.remove("blocked");
+    }, 600);
+    actionCmd = "";
+  }
 
-
+  // //FLEE ATTACK - TEST SCREEN BATTLE //
+  if (actionCmd == "flee") {
+    const messageFlee = document.querySelector(".battle-animation-display-scene-action-flee")
+    playerAction.classList.add("actionSlash")
+    setTimeout(() => {
+      enemyHitbox.classList.add("hitbox-flee");
+      enemyAction.classList.add("flee");
+      messageFlee.style.display = "flex";
+    }, 300);
+    setTimeout(() => {
+      enemyHitbox.classList.remove("hitbox-flee");
+      messageFlee.style.display = "none";
+    }, 800);
+    setTimeout(() => {
+      playerAction.classList.remove("actionSlash");
+      enemyAction.classList.remove("flee");
+    }, 600);
+    actionCmd = "";
+  }
+}
 //TEST SCREEN BATTLE //
+///////////////////////
 
 function targetMovement(char_obj, char_case) {
   const actualPos = document.querySelector(`.case[data-x="${char_obj.posX}"][data-y="${char_obj.posY}"]`);
