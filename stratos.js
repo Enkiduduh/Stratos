@@ -170,7 +170,7 @@ function initEnemy() {
   const enemyCase = document.querySelector(`.case[data-x="${enemy.posX}"][data-y="${enemy.posY}"]`);
   enemyCase.innerHTML = `
   <div class="char-obj-case">
-    <img src=${enemy.img} alt=${enemy.name} class="vertical-portrait-foe"/><div class="abs-image"></div>
+    <img src=${enemy.img} alt=${enemy.name} class="vertical-portrait-foe"/>
     <div class="char-obj-case-life-container">
         <div class="char-obj-case-life"><div>
     </div>
@@ -279,7 +279,6 @@ function attackWeaponSelector(element, char_obj) {
   if (selectedWeaponName != null) {
     attackTarget(char_obj, selectedWeaponName)
   }
-
 }
 
 function attackHandler(char_obj) {
@@ -531,7 +530,7 @@ async function animationBattleScreen(playerAction, enemyAction, actionCmd, char_
   setTimeout(() => {
     battleScreen.style.display = "none";
     displayCombat.style.display = "none";
-  }, 3000);
+  }, 300000);
 
   await delay(400);
   //NORMAL ATTACK - TEST SCREEN BATTLE //
