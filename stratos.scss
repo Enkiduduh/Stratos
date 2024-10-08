@@ -607,7 +607,6 @@ body {
   }
   .weapon-char {
     background: yellow;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -659,14 +658,14 @@ body {
     }
 
     .player-action {
-      transition: left 0.3s ease-in;
+      transition: left 0.5s ease-in;
       left: 0px;
       &:hover {
-        left: 100px;
+        left: 180px;
       }
     }
     .actionSlash {
-      left: 100px;
+      left: 180px;
     }
     //////////////////
     // ENEMY HITBOX //
@@ -853,8 +852,31 @@ body {
       }
     }
     // Flee attack Received - ENEMY HITBOX //
-    //////////////////////////////////////////////////////
-    ///
+    /////////////////////////////////////////
+    ///    Damage indicator               ///
+
+    .battle-animation-display-scene-action-dmg-display {
+      position: absolute;
+      z-index: 10;
+      width: 40px;
+      height: 20px;
+      color:white;
+      transition : all 1s ease;
+    }
+
+    .transition-dmg-off {
+      top: 15px;
+      left: 25px;
+      display: none;
+    }
+    .transition-dmg-on {
+      top: -25px;
+      left: 50px;
+    }
+
+    ///    Damage indicator               ///
+    /// /////////////////////////////////////
+
     #enemy-img {
       transform: rotateY(-180deg);
       width: 60px;

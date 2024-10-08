@@ -635,14 +635,14 @@ body {
   opacity: 0.5;
 }
 .battle-animation-container .battle-animation-display-scene .player-action {
-  transition: left 0.3s ease-in;
+  transition: left 0.5s ease-in;
   left: 0px;
 }
 .battle-animation-container .battle-animation-display-scene .player-action:hover {
-  left: 100px;
+  left: 180px;
 }
 .battle-animation-container .battle-animation-display-scene .actionSlash {
-  left: 100px;
+  left: 180px;
 }
 .battle-animation-container .battle-animation-display-scene .battle-animation-display-scene-action-hitbox {
   position: absolute;
@@ -792,6 +792,23 @@ body {
   to {
     background-position: 0 -130px;
   }
+}
+.battle-animation-container .battle-animation-display-scene .battle-animation-display-scene-action-dmg-display {
+  position: absolute;
+  z-index: 10;
+  width: 40px;
+  height: 20px;
+  color: white;
+  transition: all 1s ease;
+}
+.battle-animation-container .battle-animation-display-scene .transition-dmg-off {
+  top: 15px;
+  left: 25px;
+  display: none;
+}
+.battle-animation-container .battle-animation-display-scene .transition-dmg-on {
+  top: -25px;
+  left: 50px;
 }
 .battle-animation-container .battle-animation-display-scene #enemy-img {
   transform: rotateY(-180deg);

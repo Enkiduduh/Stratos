@@ -525,6 +525,10 @@ async function animationBattleScreen(playerAction, enemyAction, actionCmd, char_
   enemyLife.classList.add("hit");
   const hit = document.querySelector(".hit");
 
+  const dmgDisplay = document.querySelector(".battle-animation-display-scene-action-dmg-display");
+  const transitionDmgOff = document.querySelector(".transition-dmg-off");
+  const transitionDmgOn = document.querySelector(".transition-dmg-on");
+
   await delay(20);
   battleScreen.style.display = "flex";
   setTimeout(() => {
@@ -539,6 +543,8 @@ async function animationBattleScreen(playerAction, enemyAction, actionCmd, char_
     setTimeout(() => {
       enemyHitbox.classList.add("hitbox-normal");
       enemyAction.classList.add("shaked");
+      transitionDmgOff.style.display = "block";
+      dmgDisplay.classList.add("transition-dmg-on");
     }, 500);
     setTimeout(() => {
       if (parseInt(hit.style.width) <= 50) {
@@ -554,6 +560,8 @@ async function animationBattleScreen(playerAction, enemyAction, actionCmd, char_
     setTimeout(() => {
       playerAction.classList.remove("actionSlash");
       enemyAction.classList.remove("shaked");
+      // dmgDisplay.classList.remove("transition-dmg-on");
+      transitionDmgOn.style.display = "none";
     }, 800);
     actionCmd = "";
   }
